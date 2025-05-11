@@ -10,11 +10,16 @@ static U: BytesToI16 = BytesToI16 {
 
 static DATA: [[i16; 2161]; 1081] = unsafe { U.data };
 
-/// Estimated elevation in meters at a given latitude and longitude.
-/// Interpolates between the nearest known grid measurements.
+/// Estimated elevation in meters at a given latitude and longitude. Interpolates between known points.
 pub fn elevation(lat: f64, lon: f64) -> f64 {
-    assert!((-90.0..=90.0).contains(&lat), "Latitude out of bounds");
-    assert!((-180.0..=180.0).contains(&lon), "Longitude out of bounds");
+    assert!(
+        (-90.0..=90.0).contains(&lat),
+        "Latitude out of bounds [-90.0, 90.0]"
+    );
+    assert!(
+        (-180.0..=180.0).contains(&lon),
+        "Longitude out of bounds [-180.0, 180.0]"
+    );
 
     // Grid dimensions and step size
     let lat_min = -90.0;
