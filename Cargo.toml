@@ -1,6 +1,13 @@
 [package]
 name = "elevation-mini"
 version = "0.1.0"
+authors = ["Ethan Thyssen <ethyssen01@gmail.com>"]
 edition = "2024"
+description = "Super simple elevation estimates for any point on Earth"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+repository = "https://github.com/ethyssen/elevation-mini"
+keywords = ["elevation", "geodata"]
+categories = ["science::geo"]
 
 [dependencies]
