@@ -34,12 +34,13 @@ pub fn elevation(lat: f64, lon: f64) -> f64 {
     let y = lat_pos.floor() as usize;
     let x = lon_pos.floor() as usize;
 
-    let dy = lat_pos - y as f64;
-    let dx = lon_pos - x as f64;
-
     // Clamp to avoid going out of bounds
     let y = y.min(1079); // since we use y+1
     let x = x.min(2159); // since we use x+1
+
+    // Fractional offsets based on the clamped indices
+    let dy = lat_pos - y as f64;
+    let dx = lon_pos - x as f64;
 
     let q11 = DATA[y][x] as f64;
     let q12 = DATA[y][x + 1] as f64;
@@ -47,5 +48,21 @@ pub fn elevation(lat: f64, lon: f64) -> f64 {
     let q22 = DATA[y + 1][x + 1] as f64;
 
     // Bilinear interpolation
-    q11 * (1.0 - dx) * (1.0 - dy) + q12 * dx * (1.0 - dy) + q21 * (1.0 - dx) * dy + q22 * dx * dy
+q11 * (1.0 - dx) * (1.0 - dy) + q12 * dx * (1.0 - dy) + q21 * (1.0 - dx) * dy + q22 * dx * dy
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn boundary_values() {
+        // Latitude 90°, longitude 0° should correspond exactly to DATA[1080][1080]
+        let expected = DATA[1080][1080] as f64;
+        assert_eq!(elevation(90.0, 0.0), expected);
+
+        // Latitude 0°, longitude 180° should correspond exactly to DATA[540][2160]
+        let expected = DATA[540][2160] as f64;
+        assert_eq!(elevation(0.0, 180.0), expected);
+    }
 }
